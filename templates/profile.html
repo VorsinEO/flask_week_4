@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block container %}
+  <main class="container mt-3">
+    <div class="card my-4 mx-auto">
+      <div class="card-body m-2 m-md-4">
+        <article class="row">
+          <div class="col-5"><img src={{teacher.picture}} class="img-fluid" alt=""></div>
+          <div class="col-7">
+
+            <section class="teacher=info">
+
+              <h1 class="h2">{{teacher.name}} </h1>
+              <p class="font-weight-bold"> {% for goal in teacher.goals%}
+                    <span class="badge badge-secondary mr-2">{{goal.value}}</span>
+                  {% endfor%}
+              &#128525; {{teacher.rating}}&nbsp;&nbsp; {{teacher.price}} / час</p>
+              <p>{{teacher.about}}</p>
+
+            </section>
+
+            <section class="available">
+
+              <h4 class="mb-4 mt-5">Записаться на пробный урок</h4>
+             {% set count = {'value': 0} %}
+             {% for day in teacher.free%}
+             <h6 class="mt-4">{{dow[day]}}</h6>
+              {% for time, status in teacher.free[day].items()%}
+                {% if status%}
+                  <a href="/booking/{{teacher.id}}/{{day}}/{{time[:2]}}" class="btn btn-outline-success mr-2 mb-2">{{time}} свободно</a>
+                  
+                  {% if count.update({'value': (count.value + 1)}) %} {% endif %}
+                {% endif%}
+               {% endfor%}
+               {%if count.value==0%}
+                <p>Нет свободных уроков</p>
+              {% endif%}
+              {% if count.update({'value': 0}) %}{% endif %}
+              {% endfor%}
+            </section>
+
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </main>
+  {% endblock %}
